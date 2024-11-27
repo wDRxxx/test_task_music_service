@@ -1,0 +1,174 @@
+definitions:
+  models.DefaultResponse:
+    properties:
+      error:
+        type: boolean
+      message:
+        type: string
+    type: object
+  models.Song:
+    properties:
+      group:
+        type: string
+      id:
+        type: integer
+      link:
+        type: string
+      release_date:
+        type: string
+      song:
+        type: string
+      text:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /songs:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает список всех песен по заданной странице и фильтру
+      parameters:
+      - description: Страница
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Группа-исполнитель
+        in: query
+        name: group
+        type: string
+      - description: Название песни
+        in: query
+        name: song
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Song'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.DefaultResponse'
+      summary: Получение списка песен
+    post:
+      consumes:
+      - application/json
+      description: Создает новую песню с заданными полями
+      parameters:
+      - description: Данные о песне
+        in: body
+        name: song
+        required: true
+        schema:
+          $ref: '#/definitions/models.Song'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.DefaultResponse'
+      summary: Создает новую песню
+  /songs/{id}:
+    delete:
+      description: Создает новую песню с заданными полями
+      parameters:
+      - description: ID песни
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.DefaultResponse'
+      summary: Удаляет песню
+    get:
+      consumes:
+      - application/json
+      description: Возвращает песню по ее ID
+      parameters:
+      - description: ID песни
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Song'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.DefaultResponse'
+      summary: Возвращает песню
+    patch:
+      consumes:
+      - application/json
+      description: Обновляет данные песни
+      parameters:
+      - description: ID песни
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Данные о песне
+        in: body
+        name: song
+        required: true
+        schema:
+          $ref: '#/definitions/models.Song'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.DefaultResponse'
+      summary: Обновляет данные песни
+  /songs/{id}/text:
+    get:
+      description: Возвращает заданный куплет песни
+      parameters:
+      - description: Номер куплета
+        in: query
+        name: verse
+        required: true
+        type: string
+      - description: ID песни
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DefaultResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.DefaultResponse'
+      summary: Возвращает куплет песни
+swagger: "2.0"
